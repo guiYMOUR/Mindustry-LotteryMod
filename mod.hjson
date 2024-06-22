@@ -1,0 +1,8 @@
+displayName: lottery mod（抽卡模拟）
+name:"lottery"
+author: guiY
+main: "lottery.Lottery"
+description: "Come and try your luck! 来试试运气吧！\n\n\n- [!] This mod is currently in the testing phase and may update other prize pools in the future\n\n\nSupport for multiplayer online!\n\n\n封面是我老婆，她叫阿尔图罗"
+version: beta0.32
+java: true
+minGameVersion: 138
