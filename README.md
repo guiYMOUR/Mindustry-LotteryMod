@@ -1,0 +1,2 @@
+# Mindustry-LotteryMod
+Gacha!
