@@ -8,19 +8,21 @@ import arc.struct.IntSeq;
 import arc.struct.Seq;
 import arc.util.Strings;
 import lottery.contents.LBlocks;
+import lottery.contents.LUI;
 import lottery.contents.popAll;
 import lottery.net.LCall;
 import lottery.ui.LotteryRes;
-import lottery.worlds.blocks.main;
+import lottery.ui.MdfUI;
+import lottery.worlds.blocks.LotteryBlock;
 import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
 import mindustry.gen.Icon;
 import mindustry.mod.*;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
-import mindustry.ui.dialogs.SettingsMenuDialog;
 
 import static arc.Core.settings;
+import static lottery.contents.LUI.mdfUI;
 import static mindustry.Vars.ui;
 
 public class Lottery extends Mod{
@@ -57,6 +59,8 @@ public class Lottery extends Mod{
         }
 
         if(!onlyPlugIn) {
+            LUI.init();
+
             LCall.registerPackets();
             LBlocks.initItemRes();
         }
@@ -76,6 +80,20 @@ public class Lottery extends Mod{
                 settingsTable.button(b -> b.add(new Image(Icon.file)),
                         Styles.cleari, Lottery::showPop).margin(6).pad(6).tooltip(Core.bundle.get("stat.lottery.p-p"));
                 settingsTable.row();
+
+                if(onlyPlugIn) return;
+                settingsTable.row();
+//                settingsTable.table(Styles.grayPanel, m -> {
+//                    int i = 0;
+//                    for(var b : LBlocks.mains){
+//                        if(b instanceof LotteryBlock mb)
+//                        m.button(bt -> {
+//                            bt.add(new Image(b.uiIcon)).size(48);
+//                        }, Styles.cleari, () -> mdfUI.show(mb)).pad(8);
+//                        i ++;
+//                        if(i % 4 == 0) m.row();
+//                    }
+//                }).pad(10).margin(5);
             });
         }
     }
@@ -114,7 +132,9 @@ public class Lottery extends Mod{
 
     @Override
     public void loadContent(){
-        if(!onlyPlugIn) LBlocks.load();
+        if(!onlyPlugIn) {
+            LBlocks.load();
+        }
     }
 
     private static void lottery(){

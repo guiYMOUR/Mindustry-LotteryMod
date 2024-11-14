@@ -12,6 +12,8 @@ import mindustry.entities.Effect;
 import mindustry.graphics.Drawf;
 
 public class LFx {
+    //自己差点忘了，加个注释
+    //展开线条
     public static Effect lpr = new Effect(24, e->{
         if(!(e.data instanceof Float f)) return;
         Draw.color(e.color);
@@ -21,6 +23,7 @@ public class LFx {
         Scl.scl();
         Lines.rect(e.x - w/2f, e.y - h/2f, w, h);
     });
+    //粒子效果
     public static Effect lcr = new Effect(45, e -> {
         if(!(e.data instanceof Float f)) return;
         float h = Core.graphics.getHeight()/4.3f;

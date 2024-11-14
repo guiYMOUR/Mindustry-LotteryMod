@@ -13,7 +13,7 @@ import arc.struct.*;
 import arc.util.Align;
 import arc.util.Time;
 import lottery.contents.LFx;
-import lottery.worlds.blocks.main;
+import lottery.worlds.blocks.LotteryBlock;
 import mindustry.ctype.UnlockableContent;
 import mindustry.entities.Units;
 import mindustry.gen.Building;
@@ -28,16 +28,14 @@ import universecore.ui.elements.BloomGroup;
 import universecore.ui.elements.SceneEffect;
 
 public class LotteryRes extends BaseDialog{
-    public Building owner;
-    private float floatTime = 55f;
+    private float floatTime;
 
     public LotteryRes() {
         super("Lucky");
     }
 
-    public void show(Seq<UnlockableContent> us, Seq<Color> uc, IntSeq tier, main.mainBuild owner){
-        this.owner = owner;
-
+    public void show(Seq<UnlockableContent> us, Seq<Color> uc, IntSeq tier, LotteryBlock.mainBuild owner){
+        floatTime = 55;
         cont.clear();
 
         float h = Core.graphics.getHeight()/1.1f;
@@ -45,11 +43,6 @@ public class LotteryRes extends BaseDialog{
         BloomGroup bg = new BloomGroup();//预先创建泛光组以放置特效
         bg.setClip(true);
         var p = cont.pane(tb -> {
-//            tb.actions(
-//                    Actions.moveBy(0, -120),
-//                    Actions.delay(1),
-//                    Actions.moveBy(0, 180, 0.5f, Interp.pow2Out)
-//            );
             tb.update(() -> floatTime = Math.max(0f, floatTime - Time.delta));
             for (int i = 0; i < us.size; i++) {
                 var u = us.get(i);
@@ -175,51 +168,11 @@ public class LotteryRes extends BaseDialog{
                                 );
                             })
                     );
-                }).height(h).width(60).pad(6);
+                }).height(h).width(Math.min(Core.graphics.getWidth()/18f, 60f)).pad(6);
             }
             tb.fill(upper -> upper.add(bg).grow());
         }).width(Core.graphics.getWidth()).height(Core.graphics.getHeight()).get();
         cont.add(bg).update(e -> e.setBounds(p.x, p.y, p.getWidth(), p.getHeight()));
-//        cont.row();
-//
-//        cont.table(massage -> {
-//            if(owner == null) return;
-//            massage.actions(
-//                    Actions.moveBy(0, -300),
-//                    Actions.delay(1.1f),
-//                    Actions.moveBy(0, 300, 0.5f, Interp.pow2Out)
-//            );
-//            ObjectMap<Item, Integer> map = new ObjectMap<>();
-//            int r = 0;
-//            for(var u : us){
-//                r++;
-//                if(u instanceof Block b){
-//                    var item = b.requirements;
-//                    if(item.length <= 0) continue;
-//                    showOnTable(item, b, massage);
-//                    addToMap(map, item);
-//                } else if(u instanceof UnitType ut){
-//                    if(ut.constructor.get() instanceof UnitWaterMove && owner.floor() != null && !owner.floor().isLiquid) {
-//                        var item = ut.getFirstRequirements();
-//                        if(item.length <= 0) continue;
-//                        showOnTable(item, ut, massage);
-//                        addToMap(map, item);
-//                    } else {
-//                        massage.table(t -> t.add(new Image(ut.uiIcon)).size(32)).pad(5);
-//                        massage.table(t -> t.add(new Image(Icon.right)).size(20)).pad(5);
-//                        massage.table(t -> t.add("放生")).pad(5);
-//                    }
-//                }
-//
-//                if((r + 1) % 5 == 0) massage.row();
-//            }
-//            massage.row();
-//            massage.table(e -> e.add("总计")).pad(10);
-//            massage.row();
-//            massage.table(total -> {
-//
-//            });
-//        }).pad(20);
 
         buttons.clear();
         buttons.button("@ok", Icon.ok, () -> {
@@ -228,6 +181,12 @@ public class LotteryRes extends BaseDialog{
             }
             hide();
         }).width(210);
+
+        closeOnBack(() -> {
+            if (owner != null && us.size > 0) {
+                owner.configure(us.items);
+            }
+        });
 
         show();
     }

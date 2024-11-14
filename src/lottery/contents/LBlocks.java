@@ -1,7 +1,8 @@
 package lottery.contents;
 
 import arc.graphics.Color;
-import lottery.worlds.blocks.main;
+import arc.struct.Seq;
+import lottery.worlds.blocks.LotteryBlock;
 import lottery.worlds.blocks.resBlock;
 import mindustry.Vars;
 import mindustry.content.Items;
@@ -15,11 +16,12 @@ import static mindustry.type.ItemStack.with;
 public class LBlocks {
     public static Block
         resBag, unitBag, bag, finalLot;
+    public static Seq<Block> mains = new Seq<>();
     public static void load(){
-        resBag = new main("res-bag"){{
+        resBag = new LotteryBlock("res-bag"){{
             size = 2;
             health = 1000;
-            requirements(Category.effect, with(Items.graphite, 200));
+            requirements(Category.effect, with(Items.graphite, 300, Items.silicon, 100));
             pop = new int[]{70, 20, 9, 1};
             popLen = 4;
 
@@ -27,18 +29,18 @@ public class LBlocks {
             cut = 30;
 
             lotteryItem = Items.graphite;
-            perLottery = 65;
+            perLottery = 110;
 
             alwaysUnlocked = true;
         }};
 
-        unitBag = new main("unit-bag"){{
+        unitBag = new LotteryBlock("unit-bag"){{
             size = 3;
             health = 1500;
-            requirements(Category.effect, with(Items.silicon, 300));
+            requirements(Category.effect, with(Items.silicon, 300, Items.graphite, 100));
 
             lotteryItem = Items.silicon;
-            perLottery = 50;
+            perLottery = 100;
 
             pop = new int[]{80, 15, 4, 1};
             popLen = 4;
@@ -70,7 +72,7 @@ public class LBlocks {
             }
         };
 
-        bag = new main("bag"){{
+        bag = new LotteryBlock("bag"){{
             size = 3;
             requirements(Category.effect, with(Items.silicon, 250, Items.graphite, 250, Items.thorium, 180));
             pop = new int[]{70, 28, 2};
@@ -81,20 +83,23 @@ public class LBlocks {
                     Color.valueOf("FBFFB0")
             };
             lotteryItem = Items.silicon;
-            perLottery = 60;
+            perLottery = 150;
             cutAmount = 1;
             health = 1000;
 
             alwaysUnlocked = true;
         }};
-        finalLot = new main("final-lot"){{
+        finalLot = new LotteryBlock("final-lot"){{
             size = 3;
             requirements(Category.effect, with(Items.surgeAlloy, 300, Items.phaseFabric, 300, Items.graphite, 600, Items.silicon, 600));
             health = 2000;
 
             alwaysUnlocked = true;
         }};
+
+        mains.addAll(resBag, unitBag, bag, finalLot);
     }
+
     public static void initItemRes(){
         if(Vars.content.items().size > 0) for(var i : Vars.content.items()){
             if(i.buildable) {
@@ -120,13 +125,13 @@ public class LBlocks {
 
             if (buildCost == 0) continue;
             if (buildCost <= 30) {
-                ((main)resBag).pops.get(0).add(b);
+                ((LotteryBlock)resBag).pops.get(0).add(b);
             } else if (buildCost <= 60) {
-                ((main)resBag).pops.get(1).add(b);
+                ((LotteryBlock)resBag).pops.get(1).add(b);
             } else if (buildCost <= 180) {
-                ((main)resBag).pops.get(2).add(b);
+                ((LotteryBlock)resBag).pops.get(2).add(b);
             } else if(buildCost <= 500){
-                ((main)resBag).pops.get(3).add(b);
+                ((LotteryBlock)resBag).pops.get(3).add(b);
             }
         }
     }
