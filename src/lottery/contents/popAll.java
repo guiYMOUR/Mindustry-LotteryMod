@@ -5,7 +5,11 @@ import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.content.Items;
+import mindustry.content.Planets;
 import mindustry.ctype.UnlockableContent;
+import mindustry.entities.Units;
+import mindustry.gen.Building;
+import mindustry.gen.UnitWaterMove;
 import mindustry.type.ItemStack;
 import mindustry.type.UnitType;
 import mindustry.world.Block;
@@ -75,5 +79,12 @@ public class popAll {
             return seq.get(r);
         }
         return null;
+    }
+
+    public static boolean canRelease(UnitType ut, Building owner){
+        return owner != null &&
+                (!(Vars.state.rules.planet == Planets.sun || ut.shownPlanets.contains(Vars.state.rules.planet)) ||
+                        owner.team.data().countType(ut) >= Units.getCap(owner.team()) ||
+                        (ut.constructor.get() instanceof UnitWaterMove && owner.floor() != null && !owner.floor().isLiquid));
     }
 }

@@ -9,16 +9,16 @@ import arc.scene.actions.Actions;
 import arc.scene.style.BaseDrawable;
 import arc.scene.ui.Image;
 import arc.scene.ui.layout.Table;
-import arc.struct.*;
+import arc.struct.IntSeq;
+import arc.struct.ObjectMap;
+import arc.struct.Seq;
 import arc.util.Align;
 import arc.util.Time;
 import lottery.contents.LFx;
+import lottery.contents.popAll;
 import lottery.worlds.blocks.LotteryBlock;
 import mindustry.ctype.UnlockableContent;
-import mindustry.entities.Units;
-import mindustry.gen.Building;
 import mindustry.gen.Icon;
-import mindustry.gen.UnitWaterMove;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.type.UnitType;
@@ -114,9 +114,7 @@ public class LotteryRes extends BaseDialog{
                                         itemSize = 10f * m;
                                     }
                                 } else if(u instanceof UnitType ut){
-                                    if(owner != null &&
-                                            (owner.team.data().countType(ut) >= Units.getCap(owner.team) ||
-                                                    (ut.constructor.get() instanceof UnitWaterMove && owner.floor() != null && !owner.floor().isLiquid))) {
+                                    if(popAll.canRelease(ut, owner)) {
                                         var item = ut.getFirstRequirements();
                                         if(item.length > 0) {
                                             can = true;
@@ -148,9 +146,7 @@ public class LotteryRes extends BaseDialog{
                                         can = true;
                                     }
                                 } else if(u instanceof UnitType ut){
-                                    if(owner != null &&
-                                            (owner.team.data().countType(ut) >= Units.getCap(owner.team) ||
-                                                    (ut.constructor.get() instanceof UnitWaterMove && owner.floor() != null && !owner.floor().isLiquid))) {
+                                    if(popAll.canRelease(ut, owner)) {
                                         var item = ut.getFirstRequirements();
                                         if(item.length > 0) {
                                             showOnTable(item, table);

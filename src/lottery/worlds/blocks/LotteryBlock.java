@@ -8,19 +8,14 @@ import arc.scene.ui.layout.Table;
 import arc.struct.IntSeq;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
-import arc.util.Nullable;
 import arc.util.Strings;
 import lottery.contents.popAll;
 import lottery.net.LCall;
 import lottery.ui.ItemDisplay;
-import lottery.ui.LotteryRes;
 import mindustry.Vars;
 import mindustry.content.Items;
 import mindustry.ctype.UnlockableContent;
-import mindustry.entities.Units;
 import mindustry.gen.Building;
-import mindustry.gen.Call;
-import mindustry.gen.UnitWaterMove;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.type.UnitType;
@@ -29,7 +24,7 @@ import mindustry.world.Block;
 import mindustry.world.meta.Stat;
 
 import static lottery.contents.LUI.beforeLottery;
-import static lottery.contents.LUI.lotteryRes;
+import static lottery.contents.popAll.canRelease;
 import static lottery.contents.popAll.popRandom;
 import static mindustry.Vars.net;
 import static mindustry.Vars.state;
@@ -225,7 +220,7 @@ public class LotteryBlock extends Block {
                         }
                     }
                 } else if(o instanceof UnitType u){
-                    if(team.data().countType(u) >= Units.getCap(team) || (u.constructor.get() instanceof UnitWaterMove && floor() != null && !floor().isLiquid)){
+                    if(canRelease(u, this)){
                         var item = u.getFirstRequirements();
                         if(item.length > 0){
                             for(ItemStack stack : item){
